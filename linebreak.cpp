@@ -9,6 +9,26 @@ vector<string> words;
 vector<int> wordLengths;
 vector<vector<int> > linePenalties;
 
+#define INF 100000;
+
+int minPenalty(int n){
+    // compute the lowest possible total penalty you can achieve when laying out words n..N
+    // where N is the total number of words in your text
+
+    //loop over all of the possible configurations for the very first sentence
+    int currPenalty;
+    int best = INF;
+    for (int k = 0; k < linePenalties.size(); k++){
+        currPenalty = linePenalties[n][k] + minPenalty(n+k+1);
+        if(currPenalty < best) 
+            best = currPenalty;
+    }
+    return best;
+    //first rest
+    //fill in the first sentence and the next one as best as u could
+    //pass the next word available after the first sentence to minPenalty()
+}
+
 int main(){
 
     int maxLineWidth;
@@ -40,19 +60,24 @@ int main(){
 
 
     linePenalties.resize(words.size());
+    for(int n = 0; n < words.size(); n++)
+        linePenalties[n] = vector<int>();
+
     // just in case: auto itr = words.begin(); itr != words.end(); ++itr
     for (int n = 0; n < words.size(); n++) {
         // *itr is the word we grabbed
         int k = 0;
         int occupied = 0; // this is the total number of space occupied by words
         int penalty = 0;
+        int spaces = 0;
             // while still have space to use
             while (occupied + wordLengths[k+1] > maxLineWidth) {
                 occupied += wordLengths[k];
                 // I will have k+1 words that I have grabbed from the list.
                 // And I will have one less space than the number of words I have grabbed.
                 // That's just k. I have k blank spaces in between the words.
-                penalty = pow((maxLineWidth - occupied - k), 3);
+                spaces = maxLineWidth - occupied - k;
+                penalty = spaces * spaces * spaces;
                 linePenalties[n].push_back(penalty);
                 k++;
             }
