@@ -20,7 +20,7 @@ int minPenalty(int n){
     int best = INF;
     for (int k = 0; k < linePenalties.size(); k++){
         currPenalty = linePenalties[n][k] + minPenalty(n+k+1);
-        if(currPenalty < best) 
+        if(currPenalty < best)
             best = currPenalty;
     }
     return best;
@@ -71,7 +71,7 @@ int main(){
         int penalty = 0;
         int spaces = 0;
             // while still have space to use
-            while (occupied + wordLengths[k+1] > maxLineWidth) {
+            while (!(occupied + wordLengths[k+1] > maxLineWidth)) {
                 occupied += wordLengths[k];
                 // I will have k+1 words that I have grabbed from the list.
                 // And I will have one less space than the number of words I have grabbed.
