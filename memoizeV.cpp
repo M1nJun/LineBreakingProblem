@@ -11,7 +11,7 @@ vector<vector<int> > linePenalties;
 vector<int> minPenalties;
 vector<int> optNumWords;
 
-#define INF 100000;
+#define INF 1000000000;
 
 int minPenalty(int n){
     // compute the lowest possible total penalty you can achieve when laying out words n..N
@@ -19,13 +19,16 @@ int minPenalty(int n){
 
     //loop over all of the possible configurations for the very first sentence
 
+    if(n >= words.size())
+        return 0;
+    
     if (minPenalties[n] >= 0){
         return minPenalties[n];
     }
 
     int currPenalty;
     int best = INF;
-    for (int k = 0; k < linePenalties.size(); k++){
+    for (int k = 0; k < linePenalties[n].size(); k++){
 
         currPenalty = linePenalties[n][k] + minPenalty(n+k+1);
         if(currPenalty < best)
@@ -80,31 +83,38 @@ int main(){
         int penalty = 0;
         int spaces = 0;
             // while still have space to use
-            while (!(occupied + wordLengths[k] + k + 1> maxLineWidth)) {
-                occupied += wordLengths[k];
-                // I will have k+1 words that I have grabbed from the list.
-                // And I will have one less space than the number of words I have grabbed.
-                // That's just k. I have k blank spaces in between the words.
-                spaces = maxLineWidth - occupied - k;
-                penalty = spaces * spaces * spaces;
+            while ((!(occupied + wordLengths[n+k] + k + 1> maxLineWidth)) && (n + k < words.size())) {
+                // making sure that there's no penalty after the last word being used in the last line.
+                if (words[n+k] == words[words.size() - 1]){
+                    penalty = 0;
+                }
+                else {
+                    occupied += wordLengths[n+k];
+                    // I will have k+1 words that I have grabbed from the list.
+                    // And I will have one less space than the number of words I have grabbed.
+                    // That's just k. I have k blank spaces in between the words.
+                    spaces = maxLineWidth - occupied - k;
+                    penalty = spaces * spaces * spaces;
+                }
                 linePenalties[n].push_back(penalty);
                 k++;
             }
     }
 
-    // for (auto itr = linePenalties.begin(); itr != linePenalties.end(); ++itr) {
-    //     for (auto itr2 = itr->begin(); itr2 != itr->end(); ++itr2){
-    //             cout << *itr2 << endl;
-    //     }
-    // }
+//     for (auto itr = linePenalties.begin(); itr != linePenalties.end(); ++itr) {
+//         for (auto itr2 = itr->begin(); itr2 != itr->end(); ++itr2){
+//                 cout << *itr2 << endl;
+//         }
+//     }
 
-    cout << "checkpoint2" << endl;
     
     // minPenalties.resize(words.size());
     for(int n = 0; n < words.size(); n++) {
-        minPenalties[n] = -1;
+        minPenalties.push_back(-1);
     }
 
+    cout << "this is the minimum penalty you can acheive: " << endl;
+    cout << minPenalty(0) << endl;
 
 
     return 0;
