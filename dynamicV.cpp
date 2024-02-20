@@ -15,24 +15,24 @@ vector<int> optNumWords;
 
 //need to make a function that fills in the table
 
-int fillTable(){
+void fillTable(){
     minPenalties[words.size() - 1] = 0; // base case 342
 
     // indexes for looping over minpenalties backwards
     for(int n = linePenalties.size() - 2; n >= 0; n--){
-        // n = 328
+        // n = 341
         int currPenalty;
         int best = INF;
         for (int k = 0; k < linePenalties[n].size(); k++){
-            // need to change this line
-            currPenalty = linePenalties[n][k] + linePenalties[n][k+1];
+            // k = 0
+            currPenalty = linePenalties[n][k];
             if(currPenalty < best)
                 best = currPenalty;
         }
     minPenalties[n] = best;
     }
 }
-//and just access the table for answers 
+//and just access the table for answers
 //the function will have similar logic as the recursive
 //fill in the base case looping from the back of the words list. bc the ones with 0 pentalties could be filled in first
 
@@ -140,9 +140,11 @@ int main(){
         optNumWords.push_back(-1);
     }
 
-    cout << "this is the minimum penalty you can acheive: " << endl;
-    cout << minPenalty(0) << endl;
+    // cout << "this is the minimum penalty you can acheive: " << endl;
+    // cout << minPenalty(0) << endl;
 
+    fillTable();
+    cout << minPenalties[0] << endl;
 
     return 0;
 }

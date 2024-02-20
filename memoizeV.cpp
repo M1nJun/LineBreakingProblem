@@ -34,6 +34,8 @@ int minPenalty(int n){
             best = currPenalty;
     }
     minPenalties[n] = best;
+    cout << n << endl;
+    cout << minPenalties[n] << endl;
     return best;
     //first rest
     //fill in the first sentence and the next one as best as u could
