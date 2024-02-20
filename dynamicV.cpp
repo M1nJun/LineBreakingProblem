@@ -17,18 +17,22 @@ vector<int> optNumWords;
 
 void fillTable(){
     minPenalties[words.size() - 1] = 0; // base case 342
+    optNumWords[words.size() - 1] = 1;
 
     // indexes for looping over minpenalties backwards
     for(int n = linePenalties.size() - 2; n >= 0; n--){
         // n = 341
         int currPenalty;
         int best = INF;
+        int optWords = 0;
         for (int k = 0; k < linePenalties[n].size(); k++){
             // k = 0
             currPenalty = linePenalties[n][k];
             if(currPenalty < best)
                 best = currPenalty;
+                optWords = k + 1;
         }
+    optNumWords[n] = optWords;
     minPenalties[n] = best;
     }
 }
@@ -36,32 +40,16 @@ void fillTable(){
 //the function will have similar logic as the recursive
 //fill in the base case looping from the back of the words list. bc the ones with 0 pentalties could be filled in first
 
-int minPenalty(int n){
-    // compute the lowest possible total penalty you can achieve when laying out words n..N
-    // where N is the total number of words in your text
-
-    //loop over all of the possible configurations for the very first sentence
-
-    if(n >= words.size())
-        return 0;
-    
-    if (minPenalties[n] >= 0){
-        return minPenalties[n];
+void printWords(){
+    int n = 0;
+    while(n < words.size()) {
+        cout << words[n];
+        for(int k = 0; k < optNumWords[n]; k++){
+            cout << " " << words[n + k + 1];
+        }
+        cout << endl;
+        n = n + optNumWords[n];
     }
-
-    int currPenalty;
-    int best = INF;
-    for (int k = 0; k < linePenalties[n].size(); k++){
-
-        currPenalty = linePenalties[n][k] + minPenalty(n+k+1);
-        if(currPenalty < best)
-            best = currPenalty;
-    }
-    minPenalties[n] = best;
-    return best;
-    //first rest
-    //fill in the first sentence and the next one as best as u could
-    //pass the next word available after the first sentence to minPenalty()
 }
 
 int main(){
@@ -144,7 +132,7 @@ int main(){
     // cout << minPenalty(0) << endl;
 
     fillTable();
-    cout << minPenalties[0] << endl;
+    printWords();
 
     return 0;
 }
